@@ -12,9 +12,9 @@ car_counts = {
     'lane4': 0,
 }
 counts_car = [0, 0, 0, 0]
-ledPin1 = 2
-ledPin2 = 3
-ledPin3 = 4
+ledPin1 = 17
+ledPin2 = 22
+ledPin3 = 27
 ledPin4 = 14
 
 led1 = LED(ledPin1)
