@@ -28,7 +28,7 @@ def update_car_counts():
         sleep_duration = random.randint(10, 30)
         time.sleep(sleep_duration)
 
-def switch(index, duration):
+def switch(index):
     
     if index == '0':
         led1.on()
