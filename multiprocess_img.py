@@ -13,5 +13,5 @@ def multi():
 
     p.close()
     p.join()
-    print(result)
+    print(type(result))
     return result
