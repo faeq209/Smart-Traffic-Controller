@@ -1,6 +1,7 @@
 import random
 import time
 import threading
+from gpiozero import LED
 
 # Initial Values
 car_counts = {
@@ -9,6 +10,15 @@ car_counts = {
     'lane3': 0,
     'lane4': 0,
 }
+ledPin1 = 2
+ledPin2 = 3
+ledPin3 = 4
+ledPin4 = 14
+
+led1 = LED(ledPin1)
+led2 = LED(ledPin2)
+led3 = LED(ledPin3)
+led4 = LED(ledPin4)
 
 def update_car_counts():
     global car_counts
@@ -17,6 +27,34 @@ def update_car_counts():
         car_counts = new_car_counts
         sleep_duration = random.randint(10, 30)
         time.sleep(sleep_duration)
+
+def switch(index, duration):
+    
+    if index == '0':
+        led1.on()
+        led2.off()
+        led3.off()
+        led4.off()
+    elif index == '1':
+        led1.off()
+        led2.on()
+        led3.off()
+        led4.off()
+    elif index == '2':
+        led1.off()
+        led2.off()
+        led3.on()
+        led4.off()
+    elif index == '3':
+        led1.off()
+        led2.off()
+        led3.off()
+        led4.on()
+    else:
+        led1.off()
+        led2.off()
+        led3.off()
+        led4.off()
 
 def generate_random_car_counts():
     car_counts = {}
@@ -41,6 +79,8 @@ def traffic_controller():
         print(f"Opening {lane} for {duration} seconds")
         time.sleep(duration)
         
+        switch(index)
+
         index = (index + 1) % len(lanes_order)  # Move to the next lane in the order
         print(index)
         print(f"Number of threads: {threading.active_count()}")
@@ -51,3 +91,8 @@ if __name__ == "__main__":
     car_count_thread.start()
 
     traffic_controller()
+
+
+
+
+## pin nos.  2 3 4 14
