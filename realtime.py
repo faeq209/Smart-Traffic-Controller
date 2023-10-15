@@ -14,7 +14,7 @@ firebase = pyrebase.initialize_app(config)
 # connect to database
 database = firebase.database()
 # push data(real time stamp)
-cnt1=98
+cnt1=97
 data = {
     "lane_1": {
         "total_vehicles": cnt1,

@@ -2,17 +2,18 @@ from ultralytics import YOLO
 import cv2
 import cvzone
 import math
-from sort import *
+#from sort import *
 
-cap=cv2.VideoCapture('cars.mp4')
-#cap.set(3,1920)
-#cap.set(4,1080)
+def detect(port_n):
+  cap=cv2.VideoCapture('cars_'+port_n+'.mp4')
+  #cap.set(3,480)
+  #cap.set(4,480)
 
-model=YOLO('yolov8n.pt')
+  model=YOLO('yolov8n.pt')
 
-mask=cv2.imread('mask_1.png')
+  mask=cv2.imread('mask_'+port_n+'.png')
 
-classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
+  classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
               "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
               "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
               "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
@@ -24,15 +25,18 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "teddy bear", "hair drier", "toothbrush"
               ]
 
-while(True):
+  while(True):
     success,img=cap.read()
     #print(img.shape)
     #print(mask.shape)
+    img=cv2.resize(img,(700,400))
+    mask=cv2.resize(mask,(700,400))
     imgregion=cv2.bitwise_and(mask,img)
     imggraphics=cv2.imread("graphics_1.png",cv2.IMREAD_UNCHANGED)
     #img=cvzone.overlayPNG(img,imggraphics,(0,0))
     results=model(imgregion,stream=True)
-    detections=np.empty((0, 5))
+    #detections=np.empty((0, 5))
+    
     cnt=0
     for r in results:
         boxes=r.boxes
@@ -61,7 +65,7 @@ while(True):
 
 
 
-  #  restracker=tracker.update(detections)
+    #  restracker=tracker.update(detections)
 
     #cv2.line(img,(limits[0],limits[1]),(limits[2],limits[3]),(0,0,255),3)
 
@@ -71,7 +75,7 @@ while(True):
           
     cv2.putText(img,str(cnt),(50,100),cv2.FONT_HERSHEY_PLAIN,5,(50,50,255),3)
 
-    cv2.imshow('Image',img)
+    cv2.imshow('Lane '+port_n,img)
     #cv2.imshow('ImageRegion',imgregion)
     if(cv2.waitKey(10)&0xFF==ord('d')):
         break
@@ -79,5 +83,8 @@ while(True):
 
 
 
-cap.release()
-cv2.destroyAllWindows()
+  cap.release()
+  cv2.destroyAllWindows()
+
+if __name__=="__main__":
+   detect('4')
