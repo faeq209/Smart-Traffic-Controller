@@ -99,4 +99,4 @@ if __name__ == "__main__":
 
 
 
-## pin nos.  2 3 4 14
+## pin nos.  17 22 27 26
