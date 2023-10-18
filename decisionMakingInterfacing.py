@@ -3,6 +3,10 @@ import time
 import threading
 from gpiozero import LED
 from multiprocess_img import multi
+from db import push_traffic_data
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+
 
 # Initial Values
 car_counts = {
@@ -13,14 +17,15 @@ car_counts = {
 }
 counts_car = [0, 0, 0, 0]
 ledPin1 = 17
-ledPin2 = 22
-ledPin3 = 27
-ledPin4 = 14
+ledPin2 = 2
+ledPin3 = 3
+ledPin4 = 4
 
-led1 = LED(ledPin1)
-led2 = LED(ledPin2)
-led3 = LED(ledPin3)
-led4 = LED(ledPin4)
+GPIO.setup(ledPin1, GPIO.OUT)
+GPIO.setup(ledPin2, GPIO.OUT)
+GPIO.setup(ledPin3, GPIO.OUT)
+GPIO.setup(ledPin4, GPIO.OUT)
+
 
 def update_car_counts():
     global car_counts
@@ -28,35 +33,7 @@ def update_car_counts():
         new_car_counts = generate_random_car_counts()
         car_counts = new_car_counts
         sleep_duration = random.randint(10, 30)
-        time.sleep(sleep_duration)
-
-def switch(index):
-    
-    if index == '0':
-        led1.on()
-        led2.off()
-        led3.off()
-        led4.off()
-    elif index == '1':
-        led1.off()
-        led2.on()
-        led3.off()
-        led4.off()
-    elif index == '2':
-        led1.off()
-        led2.off()
-        led3.on()
-        led4.off()
-    elif index == '3':
-        led1.off()
-        led2.off()
-        led3.off()
-        led4.on()
-    else:
-        led1.off()
-        led2.off()
-        led3.off()
-        led4.off()
+        time.sleep(sleep_duration) 
 
 def generate_random_car_counts():
     global counts_car
@@ -81,9 +58,47 @@ def traffic_controller():
         duration = min(30, round(10 + max_car_count*2/3)) 
 
         print(f"Opening {lane} for {duration} seconds")
-        time.sleep(duration)
+        #switch(index, duration)
+        #time.sleep(duration)
         
-        switch(index)
+        #switch(index, duration)
+        if index == 0:
+            GPIO.output(ledPin1, GPIO.HIGH)
+            GPIO.output(ledPin2, GPIO.LOW)
+            GPIO.output(ledPin3, GPIO.LOW)
+            GPIO.output(ledPin4, GPIO.LOW)
+            push_traffic_data(counts_car[0], counts_car[1], counts_car[2], counts_car[3],1, 0,0, 0)
+            time.sleep(duration)
+            print("done")
+        elif index == 1:
+            GPIO.output(ledPin1, GPIO.LOW)
+            GPIO.output(ledPin2, GPIO.HIGH)
+            GPIO.output(ledPin3, GPIO.LOW)
+            GPIO.output(ledPin4, GPIO.LOW)
+            push_traffic_data(counts_car[0], counts_car[1], counts_car[2], counts_car[3],0, 1,0, 0)
+            time.sleep(duration)
+        elif index == 2:
+            GPIO.output(ledPin1, GPIO.LOW)
+            GPIO.output(ledPin2, GPIO.LOW)
+            GPIO.output(ledPin3, GPIO.HIGH)
+            GPIO.output(ledPin4, GPIO.LOW)
+            push_traffic_data(counts_car[0], counts_car[1], counts_car[2], counts_car[3],0, 0,1, 0)
+            time.sleep(duration)
+        elif index == 3:
+            GPIO.output(ledPin1, GPIO.LOW)
+            GPIO.output(ledPin2, GPIO.LOW)
+            GPIO.output(ledPin3, GPIO.LOW)
+            GPIO.output(ledPin4, GPIO.HIGH)
+            push_traffic_data(counts_car[0], counts_car[1], counts_car[2], counts_car[3],0, 0,0, 1)
+            time.sleep(duration)
+        else:
+            GPIO.output(ledPin1, GPIO.HIGH)
+            GPIO.output(ledPin2, GPIO.HIGH)
+            GPIO.output(ledPin3, GPIO.HIGH)
+            GPIO.output(ledPin4, GPIO.HIGH)
+            push_traffic_data(counts_car[0], counts_car[1], counts_car[2], counts_car[3],0, 0,0, 0)
+            time.sleep(duration)
+
 
         index = (index + 1) % len(lanes_order)  # Move to the next lane in the order
         print(index)
@@ -99,4 +114,5 @@ if __name__ == "__main__":
 
 
 
-## pin nos.  17 22 27 26
+## pin nos.  2 3 4 14
+ 
