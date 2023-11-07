@@ -2,6 +2,7 @@ import random
 import time
 import threading
 #from gpiozero import LED
+from multiprocess_img import multi
 
 # Initial Values
 car_counts = {
@@ -57,9 +58,11 @@ def update_car_counts():
         led4.off()
 
 def generate_random_car_counts():
+    counts_car=multi()
     car_counts = {}
     for lane in ['lane1', 'lane2', 'lane3', 'lane4']:
         car_counts[lane] = random.randint(0, 30)
+    print(counts_car)
     return car_counts
 
 def traffic_controller():
