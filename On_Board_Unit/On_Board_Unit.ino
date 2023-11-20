@@ -3,11 +3,11 @@
 #include <WiFi.h>
 
 // WiFi
-const char* ssid = "BATMAN-77";                
-const char* wifi_password = "kungfupanda";
+const char* ssid = "bit.ly/3Y2vzes";                
+const char* wifi_password = "!@#$%^&*()";
 
 // MQTT
-const char* mqtt_server = "192.168.0.181"; 
+const char* mqtt_server = "192.168.0.111"; 
 const char* gps_lat_topic = "GPS_LATITUDE";
 const char* gps_long_topic = "GPS_LONGITUDE";
 const char* emergency_phone_topic = "EMERGENCY_PHONE_NUMBER";
@@ -63,7 +63,7 @@ void loop() {
   Serial.setTimeout(2000);
   String lati="22.250971";
   String longi="84.902028";
-  String em_phno="9574374493";
+  String em_phno="7894433665";
   String v_no="OD-14Y-0001";
   
   float h = 5;
